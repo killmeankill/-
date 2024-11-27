@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام التغذية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            input, select, button {
+                padding: 8px;
+            }
+            label {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            label {
+                font-size: 12px;
+            }
+            input, select, button {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>نظام التغذية</h1>
+        <form id="nutritionForm">
+            <label>تاريخ الفحص (mm/dd/yyyy):</label>
+            <input type="date" id="examDate" required>
+
+            <label>الوزن (كجم):</label>
+            <input type="number" id="weight" step="0.1" required>
+
+            <label>كتلة العضلات (كجم):</label>
+            <input type="number" id="muscleMass" step="0.1" required>
+
+            <label>وزن الدهون (كجم):</label>
+            <input type="number" id="fatMass" step="0.1" required>
+
+            <label>وزن البروتين (كجم):</label>
+            <input type="number" id="proteinWeight" step="0.1" required>
+
+            <label>معدل الأيض الأساسي (BMR):</label>
+            <input type="number" id="bmr" step="1" required>
+
+            <label>الطول (سم):</label>
+            <input type="number" id="height" step="1" required>
+
+            <label>العمر:</label>
+            <input type="number" id="age" step="1" required>
+
+            <label>الجنس:</label>
+            <select id="gender" required>
+                <option value="male">ذكر</option>
+                <option value="female">أنثى</option>
+            </select>
+
+            <label>مستوى النشاط:</label>
+            <select id="activityLevel" required>
+                <option value="sedentary">خامل</option>
+                <option value="lightly_active">نشاط خفيف</option>
+                <option value="moderately_active">نشاط معتدل</option>
+                <option value="very_active">نشاط كبير</option>
+            </select>
+
+            <label>الوزن المستهدف (كجم):</label>
+            <input type="number" id="targetWeight" step="0.1" required>
+
+            <label>المدة المستهدفة (بالأشهر):</label>
+            <input type="number" id="targetDuration" step="1" required>
+
+            <button type="button" onclick="submitData()">إرسال</button>
+        </form>
+    </div>
+
+    <script>
+        function submitData() {
+            const formData = {
+                examDate: document.getElementById("examDate").value,
+                weight: parseFloat(document.getElementById("weight").value),
+                muscleMass: parseFloat(document.getElementById("muscleMass").value),
+                fatMass: parseFloat(document.getElementById("fatMass").value),
+                proteinWeight: parseFloat(document.getElementById("proteinWeight").value),
+                bmr: parseInt(document.getElementById("bmr").value),
+                height: parseInt(document.getElementById("height").value),
+                age: parseInt(document.getElementById("age").value),
+                gender: document.getElementById("gender").value,
+                activityLevel: document.getElementById("activityLevel").value,
+                targetWeight: parseFloat(document.getElementById("targetWeight").value),
+                targetDuration: parseInt(document.getElementById("targetDuration").value)
+            };
+
+            localStorage.setItem("formData", JSON.stringify(formData));
+            window.location.href = "results.html";
+        }
+    </script>
+</body>
+</html>

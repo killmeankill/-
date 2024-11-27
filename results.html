@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج التغذية والتمارين</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .workout-plan {
+            margin-top: 30px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+            table th, table td {
+                padding: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            h2 {
+                font-size: 1.1em;
+            }
+            table th, table td {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>نتائج التغذية والتمارين</h1>
+        <p id="summary"></p>
+        
+        <h2>نظام الغذاء</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الوجبة</th>
+                    <th>الأطعمة</th>
+                    <th>السعرات الحرارية</th>
+                </tr>
+            </thead>
+            <tbody id="mealPlan"></tbody>
+        </table>
+
+        <div class="workout-plan">
+            <h2>نظام التمارين</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اليوم</th>
+                        <th>التمارين</th>
+                        <th>المدة</th>
+                    </tr>
+                </thead>
+                <tbody id="gymPlan"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const formData = JSON.parse(localStorage.getItem("formData"));
+
+        // Dynamically calculate calorie needs based on BMR and activity level
+        function calculateCalorieNeeds(bmr, activityLevel) {
+            if (activityLevel === "sedentary") {
+                return bmr * 1.2;
+            } else if (activityLevel === "very_active") {
+                return bmr * 1.75;
+            }
+            return bmr * 1.5; // Default multiplier for active
+        }
+
+        // Generate a meal plan based on calorie needs
+        function generateMealPlan(calorieNeeds) {
+            const breakfast = Math.round(calorieNeeds * 0.3);
+            const lunch = Math.round(calorieNeeds * 0.4);
+            const dinner = Math.round(calorieNeeds * 0.2);
+            const dessert = Math.round(calorieNeeds * 0.1);
+
+            return [
+                { meal: "الإفطار", foods: "بيض، خبز، جبن", calories: breakfast },
+                { meal: "الغداء", foods: "دجاج مشوي، أرز بني، سلطة", calories: lunch },
+                { meal: "العشاء", foods: "سمك مشوي، خضروات مطهية", calories: dinner },
+                { meal: "الحلوى", foods: "فاكهة (تفاح، برتقال)", calories: dessert }
+            ];
+        }
+
+        // Generate a gym plan based on the user's activity level (7 days a week)
+        function generateGymPlan(activityLevel) {
+            const basicPlan = [
+                { day: "الأحد", workout: "تمارين كارديو (ركض أو دراجة)", duration: "45 دقيقة" },
+                { day: "الإثنين", workout: "تمارين مقاومة (صدر وذراعين)", duration: "60 دقيقة" },
+                { day: "الثلاثاء", workout: "تمارين كارديو (سباحة أو مشي سريع)", duration: "40 دقيقة" },
+                { day: "الأربعاء", workout: "تمارين مقاومة (ظهر وساقين)", duration: "60 دقيقة" },
+                { day: "الخميس", workout: "تمارين كارديو (الركض أو آلة السير)", duration: "45 دقيقة" },
+                { day: "الجمعة", workout: "تمارين مقاومة (تمارين البطن والأكتاف)", duration: "50 دقيقة" },
+                { day: "السبت", workout: "راحة أو تمارين تمدد (يوغا)", duration: "30 دقيقة" }
+            ];
+
+            // Adjust the plan based on the activity level
+            if (activityLevel === "sedentary") {
+                // Less intense workout for sedentary users
+                basicPlan[1].workout = "تمارين مقاومة خفيفة (أثقال خفيفة)";
+                basicPlan[3].workout = "تمارين مقاومة خفيفة (أثقال خفيفة)";
+                basicPlan[5].workout = "تمارين مقاومة خفيفة (أثقال خفيفة)";
+                basicPlan[6].workout = "تمارين تمدد بسيطة";
+            } else if (activityLevel === "very_active") {
+                // Intense workout for very active users
+                basicPlan[1].workout = "تمارين مقاومة ثقيلة (أثقال ثقيلة)";
+                basicPlan[3].workout = "تمارين مقاومة ثقيلة (أثقال ثقيلة)";
+                basicPlan[5].workout = "تمارين مقاومة ثقيلة (أثقال ثقيلة)";
+            }
+
+            return basicPlan;
+        }
+
+        function renderResults() {
+            const calorieNeeds = calculateCalorieNeeds(formData.bmr, formData.activityLevel);
+            const mealPlan = generateMealPlan(calorieNeeds);
+            const gymPlan = generateGymPlan(formData.activityLevel);
+
+            document.getElementById("summary").innerHTML = `
+                مرحبًا! بناءً على بياناتك:
+                <br> الوزن الحالي: ${formData.weight} كجم
+                <br> الوزن المستهدف: ${formData.targetWeight} كجم خلال ${formData.targetDuration} أشهر.
+                <br> احتياجاتك اليومية من السعرات الحرارية: ${Math.round(calorieNeeds)} سعرة حرارية.
+            `;
+
+            document.getElementById("mealPlan").innerHTML = mealPlan
+                .map((meal) => `<tr><td>${meal.meal}</td><td>${meal.foods}</td><td>${meal.calories}</td></tr>`)
+                .join("");
+
+            document.getElementById("gymPlan").innerHTML = gymPlan
+                .map((plan) => `<tr><td>${plan.day}</td><td>${plan.workout}</td><td>${plan.duration}</td></tr>`)
+                .join("");
+        }
+
+        renderResults();
+    </script>
+</body>
+</html>
