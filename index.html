@@ -100,6 +100,25 @@
             <label>معدل الأيض الأساسي (BMR):</label>
             <input type="number" id="bmr" step="1" required>
 
+            <label>ما هو مقدار السعرات الحرارية اليومية التي تتناولها تقريبًا:</label>
+            <input type="number" id="Calories" step="1" required>
+
+            <label for="favorite-foods">ما هي الأطعمة والمأكولات المفضلة لديك؟ هل هناك أي أطعمة لا ترغب مطلقًا في التخلي عنها؟</label>
+            <input type="text" id="favorite-foods" name="favorite-foods">
+
+            <label for="favorite-foods">ما هو روتينك اليومي المعتاد أو جدولك الزمني؟</label>
+            <input type="text" id="Work Routine" name="Work Routine">
+
+            <label for="favorite-foods">على مقياس من 1 إلى 10، ما مدى تحفيزك للالتزام بخطة فقدان الوزن؟ ما رأيك سيكون أكبر التحديات؟ </label>
+            <input type="text" id="commit" name="commit">
+
+            <label>هل أنت على استعداد لبدء ممارسة بعض التمارين الخفيفة والنشاط البدني؟ </label>
+            <select id="train" required>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+
+
             <label>الطول (سم):</label>
             <input type="number" id="height" step="1" required>
 
@@ -125,6 +144,9 @@
 
             <label>المدة المستهدفة (بالأشهر):</label>
             <input type="number" id="targetDuration" step="1" required>
+
+            <label for="دافع">ما هو الدافع الرئيسي لخسارة الوزن؟</label>
+            <input type="text" id="دافع" name="دافع">
 
             <button type="button" onclick="submitData()">إرسال</button>
         </form>
